@@ -40,44 +40,50 @@ def luhn_digit_find(n):
     return t  # find out Luhn check digit
 
 
-start_pan = int(input('Please input start number'))
-end_pan = int(input('Please input end number'))
-# create excel file and input info
-workbook = xlsxwriter.Workbook('cards.xlsx', {'default_date_format': 'dd/mm/yy'})
-worksheet = workbook.add_worksheet('cards')
+start = int(input('Please input start number'))
+end = int(input('Please input end number'))
 
-cell_format = workbook.add_format({'bold': True, 'italic': True, 'bg_color': 'gray'})
-worksheet.write_string('A1', 'PAN', cell_format)
-worksheet.set_column('A:A', 20)
-worksheet.write_string('B1', 'PIN', cell_format)
-worksheet.set_column('B:B', 5)
-worksheet.write_string('C1', 'PIN SHA-256 (can be calculated here: https://xorbin.com/tools/sha256-hash-calculator)',
-                       cell_format)
-worksheet.set_column('C:C', 70)
-worksheet.write_string('D1', 'EXPIRATION DATE', cell_format)
-worksheet.set_column('D:D', 17)
-worksheet.write_string('E1', 'Track2', cell_format)
-worksheet.set_column('E:E', 40)
 
-count = 1
+# create excel file and input all info
+def write_to_excel(start_pan, end_pan):
+    workbook = xlsxwriter.Workbook('cards.xlsx', {'default_date_format': 'dd/mm/yy'})
+    worksheet = workbook.add_worksheet('cards')
 
-exp_year = datetime.datetime.now().year + 5
-today_is = datetime.datetime.now().replace(year=exp_year)
-track2_tail_for = track2_tail()
+    cell_format = workbook.add_format({'bold': True, 'italic': True, 'bg_color': 'gray'})
+    worksheet.write_string('A1', 'PAN', cell_format)
+    worksheet.set_column('A:A', 20)
+    worksheet.write_string('B1', 'PIN', cell_format)
+    worksheet.set_column('B:B', 5)
+    worksheet.write_string('C1',
+                           'PIN SHA-256 (can be calculated here: https://xorbin.com/tools/sha256-hash-calculator)',
+                           cell_format)
+    worksheet.set_column('C:C', 70)
+    worksheet.write_string('D1', 'EXPIRATION DATE', cell_format)
+    worksheet.set_column('D:D', 17)
+    worksheet.write_string('E1', 'Track2', cell_format)
+    worksheet.set_column('E:E', 40)
 
-for m in pans_pref(start_pan, end_pan):
-    A = '{}{}'.format(m, luhn_digit_find(m))
-    track_2 = f';{A}{track2_tail_for}'
-    #print(track_2)
-    worksheet.write_string(count, 0, A)
-    worksheet.write(count, 4, track_2)
-    worksheet.write_datetime(count, 3, today_is)
-    pin = random.randint(999, 9999)
-    worksheet.write_number(count, 1, pin)
+    count = 1
 
-    k = hashlib.sha256(str(pin).encode('utf-8'))
-    val_hex = k.hexdigest()
-    worksheet.write(count, 2, val_hex)
-    count += 1
+    exp_year = datetime.datetime.now().year + 5
+    today_is = datetime.datetime.now().replace(year=exp_year)
+    track2_tail_for = track2_tail()
 
-workbook.close()
+    for m in pans_pref(start_pan, end_pan):
+        A = '{}{}'.format(m, luhn_digit_find(m))
+        track_2 = f';{A}{track2_tail_for}'
+        worksheet.write_string(count, 0, A)
+        worksheet.write(count, 4, track_2)
+        worksheet.write_datetime(count, 3, today_is)
+        pin = random.randint(999, 9999)
+        worksheet.write_number(count, 1, pin)
+
+        k = hashlib.sha256(str(pin).encode('utf-8'))
+        val_hex = k.hexdigest()
+        worksheet.write(count, 2, val_hex)
+        count += 1
+
+    workbook.close()
+
+
+write_to_excel(start, end)
