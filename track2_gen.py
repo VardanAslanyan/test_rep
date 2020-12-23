@@ -40,8 +40,8 @@ def luhn_digit_find(n):
     return t  # find out Luhn check digit
 
 
-start = int(input('Please input start number'))
-end = int(input('Please input end number'))
+start_track = int(input('Please input start number'))
+end_track = int(input('Please input end number'))
 
 
 # create excel file and input all info
@@ -86,4 +86,4 @@ def write_to_excel(start_pan, end_pan):
     workbook.close()
 
 
-write_to_excel(start, end)
+write_to_excel(start_track, end_track)
