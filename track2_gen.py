@@ -7,7 +7,7 @@ import xlsxwriter
 def track2_tail():
     today = datetime.date.today()
     exp_year = datetime.date.today().year // 100 + 5
-    exp_date = f'{str(exp_year)}{today.strftime("%m")}'
+    exp_date = f'{exp_year}{today.strftime("%m")}'
     last_part = '1011536004110000?'
     track_cont = f'={exp_date}{last_part}'
     return track_cont  # return the right side of track2
@@ -17,7 +17,7 @@ def pans_pref(start, end):
     prefix = '765432'
     for i in range(start, end):
         zero = '0' * (9 - len(str(i)))
-        y = f'{prefix}{zero}{str(i)}'
+        y = f'{prefix}{zero}{i}'
 
         yield y  # return string 15 digits
 
