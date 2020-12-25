@@ -3,7 +3,7 @@ import operator
 from pathlib import Path
 import datetime
 
-x = '9' #input('enter single input containing the expression in polish notation')
+x = input('enter single input containing the expression in polish notation')
 
 
 def valid_operations(j):
@@ -41,7 +41,7 @@ def calculate_result(r):
         if result.is_integer():
             return f'Result: {int(result)}'
 
-        return f'Result{result}'
+        return f'Result {result}'
     elif not valid_operations(r):
         return 'Error: Entered not valid operator'
     else:
