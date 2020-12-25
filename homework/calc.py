@@ -3,13 +3,11 @@ import operator
 from pathlib import Path
 import datetime
 
-x = input('enter single input containing the expression in polish notation')
-t = x.split()
+x = '9' #input('enter single input containing the expression in polish notation')
 
 
 def valid_operations(j):
-    if len(j) < 3:
-        return 'Not completed'
+
     operations = {'add', '+', 'sub', '-', 'mul', '*', 'div', '/'}
 
     for i in operations:
@@ -26,7 +24,10 @@ def check_value(y):
 
 
 def calculate_result(r):
-    if valid_operations(r) and check_value(r):
+    t = r.split()
+    if len(t) < 3:
+        return 'Error: Not completed'
+    if valid_operations(t) and check_value(t):
         operator_converted = {'add': operator.add,
                               '+': operator.add,
                               'sub': operator.sub,
@@ -36,7 +37,7 @@ def calculate_result(r):
                               'div': operator.truediv,
                               '/': operator.truediv}
 
-        result = operator_converted[r[0]](float(r[1]), float(r[2]))
+        result = operator_converted[t[0]](float(t[1]), float(t[2]))
         if result.is_integer():
             return f'Result: {int(result)}'
 
@@ -48,7 +49,7 @@ def calculate_result(r):
 
 
 def write_to_log(d):
-    work_dir = Path.home().joinpath('Desktop/python')
+    work_dir = Path.home().joinpath('Desktop/python_test')
 
     with open(work_dir.joinpath('log.txt'), 'w+') as endFile:
         endFile.write(f'Expression: {x}\n'
@@ -56,4 +57,4 @@ def write_to_log(d):
                       f'System Time: {datetime.datetime.now()}')
 
 
-write_to_log((calculate_result(t)))
+write_to_log((calculate_result(x)))
